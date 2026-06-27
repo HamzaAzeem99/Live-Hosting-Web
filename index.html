@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DropHost - Client-Side Static Hosting Platform</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl">🚀</span>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">DropHost</h1>
+        </div>
+        <span class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1 rounded-full border border-slate-700 font-mono">v1.2 (DOMParser Engine)</span>
+    </header>
+
+    <main class="flex-1 max-w-4xl w-full mx-auto p-6 flex flex-col justify-center">
+        
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mb-3">Host Your HTML Projects Instantly</h2>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base">Upload your index.html, style.css, and script.js files. Our client-side engine will deploy them instantly in your browser.</p>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col gap-4">
+            <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Project Files</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-blue-500/30 flex flex-col gap-2">
+                    <span class="text-xs font-bold text-blue-400 font-mono">REQUIRED</span>
+                    <label class="text-sm font-medium">index.html</label>
+                    <input type="file" id="html-file" accept=".html" class="text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-blue-600 file:text-white cursor-pointer w-full" />
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-pink-500/30 flex flex-col gap-2">
+                    <span class="text-xs font-bold text-pink-400 font-mono">OPTIONAL</span>
+                    <label class="text-sm font-medium">style.css</label>
+                    <input type="file" id="css-file" accept=".css" class="text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-pink-600 file:text-white cursor-pointer w-full" />
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-amber-500/30 flex flex-col gap-2">
+                    <span class="text-xs font-bold text-amber-400 font-mono">OPTIONAL</span>
+                    <label class="text-sm font-medium">script.js</label>
+                    <input type="file" id="js-file" accept=".js" class="text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-amber-600 file:text-white cursor-pointer w-full" />
+                </div>
+            </div>
+
+            <button id="deploy-btn" class="mt-4 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white font-semibold py-3 px-6 rounded-xl transition shadow-lg shadow-emerald-500/10 cursor-pointer text-center">
+                Deploy Site 🚀
+            </button>
+        </div>
+
+        <div id="status-panel" class="hidden mt-6 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl animate-fade-in">
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-emerald-500/10 rounded-xl text-emerald-400 text-xl">🎉</div>
+                <div class="flex-1">
+                    <h4 class="font-bold text-emerald-400 text-lg">Project Deployed Successfully!</h4>
+                    <p class="text-slate-400 text-xs mt-1">Your temporary live URL has been generated via Advanced DOM Engine.</p>
+                    
+                    <div class="mt-4 flex items-center gap-2 bg-slate-950 p-3 rounded-lg border border-slate-800">
+                        <input type="text" id="live-url" readonly class="bg-transparent text-xs font-mono text-slate-300 flex-1 outline-none truncate" />
+                        <button id="copy-btn" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded font-medium transition cursor-pointer">Copy URL</button>
+                    </div>
+
+                    <div class="mt-4 flex gap-3">
+                        <a id="visit-btn" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition inline-block">Open Live Site 🌐</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-6 text-xs text-slate-600 border-t border-slate-900">
+        Powered entirely by your browser's memory. No data is sent to any server.
+    </footer>
+
+    <script>
+        const htmlInput = document.getElementById('html-file');
+        const cssInput = document.getElementById('css-file');
+        const jsInput = document.getElementById('js-file');
+        const deployBtn = document.getElementById('deploy-btn');
+        const statusPanel = document.getElementById('status-panel');
+        const liveUrlInput = document.getElementById('live-url');
+        const visitBtn = document.getElementById('visit-btn');
+        const copyBtn = document.getElementById('copy-btn');
+
+        let generatedBlobUrl = null;
+
+        function readFileAsText(file) {
+            return new Promise((resolve, reject) => {
+                if (!file) resolve("");
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (err) => reject(err);
+                reader.readAsText(file);
+            });
+        }
+
+        deployBtn.addEventListener('click', async () => {
+            const htmlFile = htmlInput.files[0];
+            const cssFile = cssInput.files[0];
+            const jsFile = jsInput.files[0];
+
+            if (!htmlFile) {
+                alert("Brother, index.html file upload karna lazmi hai!");
+                return;
+            }
+
+            try {
+                const htmlContent = await readFileAsText(htmlFile);
+                const cssContent = await readFileAsText(cssFile);
+                const jsContent = await readFileAsText(jsFile);
+
+                // Real Solution: Parse HTML as a virtual DOM tree
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlContent, 'text/html');
+
+                // 1. Inject CSS safely if exists
+                if (cssContent) {
+                    const styleElement = doc.createElement('style');
+                    styleElement.textContent = cssContent;
+                    doc.head.appendChild(styleElement);
+                }
+
+                // 2. Inject JS safely if exists (creates real element, no string parsing error)
+                if (jsContent) {
+                    const scriptElement = doc.createElement('script');
+                    scriptElement.textContent = jsContent;
+                    doc.body.appendChild(scriptElement);
+                }
+
+                // Turn the virtual DOM back into a full text string
+                const finalHTML = new XMLSerializer().serializeToString(doc);
+
+                if (generatedBlobUrl) {
+                    URL.revokeObjectURL(generatedBlobUrl);
+                }
+
+                const blob = new Blob([finalHTML], { type: 'text/html' });
+                generatedBlobUrl = URL.createObjectURL(blob);
+
+                liveUrlInput.value = generatedBlobUrl;
+                visitBtn.href = generatedBlobUrl;
+                statusPanel.classList.remove('hidden');
+                statusPanel.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (error) {
+                console.error("Deployment failed:", error);
+                alert("Deployment process mein koi masla aaya hai.");
+            }
+        });
+
+        copyBtn.addEventListener('click', () => {
+            liveUrlInput.select();
+            document.execCommand('copy');
+            copyBtn.innerText = "Copied! ✓";
+            setTimeout(() => copyBtn.innerText = "Copy URL", 2000);
+        });
+    </script>
+</body>
+</html>

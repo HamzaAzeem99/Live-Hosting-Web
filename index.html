@@ -3,159 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DropHost - Client-Side Static Hosting Platform</title>
+    <title>DropHost Pro - Real Live Hosting Platform</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
 
     <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur px-6 py-4 flex justify-between items-center">
         <div class="flex items-center gap-2">
-            <span class="text-2xl">🚀</span>
-            <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">DropHost</h1>
+            <span class="text-2xl">🌐</span>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">DropHost Pro</h1>
         </div>
-        <span class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1 rounded-full border border-slate-700 font-mono">v1.2 (DOMParser Engine)</span>
+        <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/30 font-mono">Cloud Connected</span>
     </header>
 
     <main class="flex-1 max-w-4xl w-full mx-auto p-6 flex flex-col justify-center">
         
         <div class="text-center mb-8">
-            <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mb-3">Host Your HTML Projects Instantly</h2>
-            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base">Upload your index.html, style.css, and script.js files. Our client-side engine will deploy them instantly in your browser.</p>
+            <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mb-3">Deploy To The Real Internet</h2>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm">Give your project a unique folder name, upload your index.html, and get a link that works on any mobile worldwide!</p>
         </div>
 
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col gap-4">
-            <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Project Files</h3>
-            
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col gap-6">
+            <div>
+                <label class="block text-sm font-medium text-slate-400 mb-2">Project Unique Name (No spaces / lowercase only)</label>
+                <input type="text" id="project-name" placeholder="my-awesome-game" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl text-sm font-mono text-emerald-400 focus:outline-none focus:border-emerald-500">
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-blue-500/30 flex flex-col gap-2">
+                <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-slate-800 flex flex-col gap-2">
                     <span class="text-xs font-bold text-blue-400 font-mono">REQUIRED</span>
                     <label class="text-sm font-medium">index.html</label>
-                    <input type="file" id="html-file" accept=".html" class="text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-blue-600 file:text-white cursor-pointer w-full" />
+                    <input type="file" id="html-file" accept=".html" class="text-xs text-slate-400 w-full cursor-pointer" />
                 </div>
-
-                <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-pink-500/30 flex flex-col gap-2">
+                <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-slate-800 flex flex-col gap-2">
                     <span class="text-xs font-bold text-pink-400 font-mono">OPTIONAL</span>
                     <label class="text-sm font-medium">style.css</label>
-                    <input type="file" id="css-file" accept=".css" class="text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-pink-600 file:text-white cursor-pointer w-full" />
+                    <input type="file" id="css-file" accept=".css" class="text-xs text-slate-400 w-full cursor-pointer" />
                 </div>
-
-                <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-amber-500/30 flex flex-col gap-2">
+                <div class="bg-slate-950 p-4 rounded-xl border border-dashed border-slate-800 flex flex-col gap-2">
                     <span class="text-xs font-bold text-amber-400 font-mono">OPTIONAL</span>
                     <label class="text-sm font-medium">script.js</label>
-                    <input type="file" id="js-file" accept=".js" class="text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-amber-600 file:text-white cursor-pointer w-full" />
+                    <input type="file" id="js-file" accept=".js" class="text-xs text-slate-400 w-full cursor-pointer" />
                 </div>
             </div>
 
-            <button id="deploy-btn" class="mt-4 bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white font-semibold py-3 px-6 rounded-xl transition shadow-lg shadow-emerald-500/10 cursor-pointer text-center">
-                Deploy Site 🚀
+            <button id="deploy-btn" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-xl transition shadow-lg cursor-pointer text-center">
+                Publish Worldwide 🚀
             </button>
         </div>
 
-        <div id="status-panel" class="hidden mt-6 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl animate-fade-in">
+        <div id="status-panel" class="hidden mt-6 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
             <div class="flex items-start gap-4">
-                <div class="p-3 bg-emerald-500/10 rounded-xl text-emerald-400 text-xl">🎉</div>
+                <div class="p-3 bg-emerald-500/10 rounded-xl text-emerald-400 text-xl">🚀</div>
                 <div class="flex-1">
-                    <h4 class="font-bold text-emerald-400 text-lg">Project Deployed Successfully!</h4>
-                    <p class="text-slate-400 text-xs mt-1">Your temporary live URL has been generated via Advanced DOM Engine.</p>
+                    <h4 class="font-bold text-emerald-400 text-lg">Live on Internet!</h4>
+                    <p class="text-slate-400 text-xs mt-1">This link is global. Share it anywhere, open on any phone.</p>
                     
                     <div class="mt-4 flex items-center gap-2 bg-slate-950 p-3 rounded-lg border border-slate-800">
                         <input type="text" id="live-url" readonly class="bg-transparent text-xs font-mono text-slate-300 flex-1 outline-none truncate" />
-                        <button id="copy-btn" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded font-medium transition cursor-pointer">Copy URL</button>
+                        <button id="copy-btn" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded font-medium transition cursor-pointer">Copy</button>
                     </div>
 
-                    <div class="mt-4 flex gap-3">
-                        <a id="visit-btn" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition inline-block">Open Live Site 🌐</a>
+                    <div class="mt-4">
+                        <a id="visit-btn" target="_blank" class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition inline-block">Open Global Site 🌐</a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="text-center py-6 text-xs text-slate-600 border-t border-slate-900">
-        Powered entirely by your browser's memory. No data is sent to any server.
-    </footer>
-
     <script>
-        const htmlInput = document.getElementById('html-file');
-        const cssInput = document.getElementById('css-file');
-        const jsInput = document.getElementById('js-file');
+        // Your Verified Supabase Credentials
+        const SUPABASE_URL = "https://fcaltqoolejryrfkofkv.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjYWx0cW9vbGVqcnlyZmtvZmt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1ODQyNjgsImV4cCI6MjA5ODE2MDI2OH0.tMEX-Q0wFFCAWMO1odRnfDwip8tXDmc_umFkJgEQfDk";
+
+        // Fixed name duplication error by renaming variable to supabaseClient
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         const deployBtn = document.getElementById('deploy-btn');
+        const projectNameInput = document.getElementById('project-name');
         const statusPanel = document.getElementById('status-panel');
         const liveUrlInput = document.getElementById('live-url');
         const visitBtn = document.getElementById('visit-btn');
         const copyBtn = document.getElementById('copy-btn');
 
-        let generatedBlobUrl = null;
-
-        function readFileAsText(file) {
-            return new Promise((resolve, reject) => {
-                if (!file) resolve("");
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.onerror = (err) => reject(err);
-                reader.readAsText(file);
-            });
-        }
-
         deployBtn.addEventListener('click', async () => {
-            const htmlFile = htmlInput.files[0];
-            const cssFile = cssInput.files[0];
-            const jsFile = jsInput.files[0];
+            const projName = projectNameInput.value.trim().replace(/\s+/g, '-').toLowerCase();
+            const htmlFile = document.getElementById('html-file').files[0];
+            const cssFile = document.getElementById('css-file').files[0];
+            const jsFile = document.getElementById('js-file').files[0];
 
-            if (!htmlFile) {
-                alert("Brother, index.html file upload karna lazmi hai!");
+            if (!projName || !htmlFile) {
+                alert("Project name aur index.html dono lazmi hain bhai!");
                 return;
             }
 
+            deployBtn.innerText = "Deploying to Cloud... ⏳";
+            deployBtn.disabled = true;
+
             try {
-                const htmlContent = await readFileAsText(htmlFile);
-                const cssContent = await readFileAsText(cssFile);
-                const jsContent = await readFileAsText(jsFile);
+                const uploadOptions = { upsert: true, cacheControl: '3600' };
 
-                // Real Solution: Parse HTML as a virtual DOM tree
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlContent, 'text/html');
+                // Using supabaseClient everywhere safely
+                const { error: htmlErr } = await supabaseClient.storage
+                    .from('projects')
+                    .upload(`${projName}/index.html`, htmlFile, { ...uploadOptions, contentType: 'text/html' });
+                if (htmlErr) throw htmlErr;
 
-                // 1. Inject CSS safely if exists
-                if (cssContent) {
-                    const styleElement = doc.createElement('style');
-                    styleElement.textContent = cssContent;
-                    doc.head.appendChild(styleElement);
+                if (cssFile) {
+                    const { error: cssErr } = await supabaseClient.storage
+                        .from('projects')
+                        .upload(`${projName}/style.css`, cssFile, { ...uploadOptions, contentType: 'text/css' });
+                    if (cssErr) throw cssErr;
                 }
 
-                // 2. Inject JS safely if exists (creates real element, no string parsing error)
-                if (jsContent) {
-                    const scriptElement = doc.createElement('script');
-                    scriptElement.textContent = jsContent;
-                    doc.body.appendChild(scriptElement);
+                if (jsFile) {
+                    const { error: jsErr } = await supabaseClient.storage
+                        .from('projects')
+                        .upload(`${projName}/script.js`, jsFile, { ...uploadOptions, contentType: 'application/javascript' });
+                    if (jsErr) throw jsErr;
                 }
 
-                // Turn the virtual DOM back into a full text string
-                const finalHTML = new XMLSerializer().serializeToString(doc);
-
-                if (generatedBlobUrl) {
-                    URL.revokeObjectURL(generatedBlobUrl);
-                }
-
-                const blob = new Blob([finalHTML], { type: 'text/html' });
-                generatedBlobUrl = URL.createObjectURL(blob);
-
-                liveUrlInput.value = generatedBlobUrl;
-                visitBtn.href = generatedBlobUrl;
+                // Get Public global URL
+                const { data } = supabaseClient.storage.from('projects').getPublicUrl(`${projName}/index.html`);
+                
+                // Show Global URL on Dashboard
+                liveUrlInput.value = data.publicUrl;
+                visitBtn.href = data.publicUrl;
                 statusPanel.classList.remove('hidden');
                 statusPanel.scrollIntoView({ behavior: 'smooth' });
 
             } catch (error) {
-                console.error("Deployment failed:", error);
-                alert("Deployment process mein koi masla aaya hai.");
+                console.error("Cloud deployment error:", error);
+                alert("Cloud deployment mein error aaya: " + (error.message || "Bucket policies check karein."));
+            } finally {
+                deployBtn.innerText = "Publish Worldwide 🚀";
+                deployBtn.disabled = false;
             }
         });
 
+        // Copy Clipboard Feature Fixed
         copyBtn.addEventListener('click', () => {
             liveUrlInput.select();
-            document.execCommand('copy');
+            navigator.clipboard.writeText(liveUrlInput.value);
             copyBtn.innerText = "Copied! ✓";
-            setTimeout(() => copyBtn.innerText = "Copy URL", 2000);
+            setTimeout(() => {
+                copyBtn.innerText = "Copy";
+            }, 2000);
         });
     </script>
 </body>
